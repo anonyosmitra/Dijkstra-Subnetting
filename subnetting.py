@@ -1,11 +1,12 @@
 from tabulate import tabulate
 import math
 from operator import*
-
+#----------------------------------
 req=[["Y",435], ["X",1726], ["B",1430], ["M",254], ["I",7175], ["C",5], ["A",51]]
 mask=18
 netIp="105.74.79.214"
-RevOrder=False
+RevOrder=False#if (Z->A)
+#----------------------------------
 
 
 countHosts=0
@@ -103,4 +104,5 @@ def start():
         countHosts+=res[a[0]]["Granted"]
         tabHist+=[[a[0],res[a[0]]["Required"],res[a[0]]["Granted"],res[a[0]]["Mask"],res[a[0]]["Network"],res[a[0]]["Broadcast"],countHosts]]
     printTable()
+print("Subnets: "+len(req))
 start()
