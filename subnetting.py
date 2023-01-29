@@ -2,9 +2,9 @@ from tabulate import tabulate
 import math
 from operator import*
 
-req=[["H",15],["J",3], ["O",126], ["B",11], ["U",2], ["I",24], ["A",1], ["G",7], ["C",15], ["Z",1], ["F",1],["X",3], ["P",125], ["K",36], ["Y",1]]
-mask=23
-netIp="163.151.36.51"
+req=[["Y",435], ["X",1726], ["B",1430], ["M",254], ["I",7175], ["C",5], ["A",51]]
+mask=18
+netIp="105.74.79.214"
 RevOrder=False
 
 
@@ -71,17 +71,23 @@ def getAvailableHosts(mask):
     hosts=(8*4)-int(mask)
     return toInt("1"*hosts)-1
 
-
+def make32Bit(b):
+    if (len(b) < 32):
+        b = ("0" * (32 - len(b))) + b
+    return b
 def ipToBin(a):
     b=[]
     for i in a.split("."):
        b+=[toBin(i)]
     return("".join(b))
 def binToIp(b):
+    b=make32Bit(b)
     return ".".join([str(toInt(b[0:8])),str(toInt(b[8:16])),str(toInt(b[16:24])),str(toInt(b[24:32]))])
 def setUp():
     global res,req,netIp
+    print("Input: "+netIp)
     netIp=binToIp(netAddressBin(ipToBin(netIp),mask))
+    print("Net Address: " + netIp)
     for i in req:
         res[i[0]]={"Required": i[1],"Granted": getClosestBinNum(i[1]+2),"Mask":binToIp(getMaskingAddress(32-get2Pow(8)))+"/"+str(32-get2Pow(getClosestBinNum(i[1]+2)))}
         i[1]=getClosestBinNum(i[1]+2)
@@ -91,9 +97,9 @@ def start():
     while len(req)>0:
         a=popMaxReq()
         res[a[0]]["Network"]=netIp
-        netIp=binToIp((addbins(ipToBin(netIp),toBin(res[a[0]]["Granted"]-1))).split("b")[1])
+        netIp=binToIp((addbins(ipToBin(netIp),make32Bit(toBin(res[a[0]]["Granted"]-1)))).split("b")[1])
         res[a[0]]["Broadcast"] = netIp
-        netIp = binToIp((addbins(ipToBin(netIp), toBin(1))).split("b")[1])
+        netIp = binToIp((addbins(ipToBin(netIp), make32Bit(toBin(1)))).split("b")[1])
         countHosts+=res[a[0]]["Granted"]
         tabHist+=[[a[0],res[a[0]]["Required"],res[a[0]]["Granted"],res[a[0]]["Mask"],res[a[0]]["Network"],res[a[0]]["Broadcast"],countHosts]]
     printTable()
