@@ -104,5 +104,5 @@ def start():
         countHosts+=res[a[0]]["Granted"]
         tabHist+=[[a[0],res[a[0]]["Required"],res[a[0]]["Granted"],res[a[0]]["Mask"],res[a[0]]["Network"],res[a[0]]["Broadcast"],countHosts]]
     printTable()
-print("Subnets: "+len(req))
+print("Subnets: "+str(len(req)))
 start()
