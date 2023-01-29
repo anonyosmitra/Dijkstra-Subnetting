@@ -1,13 +1,13 @@
 from tabulate import tabulate
+#----------------------------------
 nodes=["Z","C","Y","M","G","W","H","Q","F","R","I","L"]
 edges=[("Z","C",1),("Z","Y",8),("C","G",9),("C","M",5),("Y","H",6),("Y","W",4),("M","Q",11),("G","F",2),("G","Q",9),("W","R",8),("W","H",6),("H","I",2),("H","L",10),("Q","I",2),("F","I",6),("R","L",10)]
-
-
+RevOrder=False #if (Z->A)
+#----------------------------------
 finished=[]
 pending=[]
 route={}
 CN=None
-RevOrder=False
 nodes.sort(reverse=RevOrder)
 tabHist=[]
 rowCount=1
