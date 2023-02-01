@@ -3,7 +3,7 @@ import math
 from operator import*
 #----------------------------------
 req=[["Y",435], ["X",1726], ["B",1430], ["M",254], ["I",7175], ["C",5], ["A",51]]
-mask=18
+mask="255.255.192.0"
 netIp="105.74.79.214"
 RevOrder=False#if (Z->A)
 #----------------------------------
@@ -84,17 +84,25 @@ def ipToBin(a):
 def binToIp(b):
     b=make32Bit(b)
     return ".".join([str(toInt(b[0:8])),str(toInt(b[8:16])),str(toInt(b[16:24])),str(toInt(b[24:32]))])
+def findMask(m):
+    global mask
+    mask=ipToBin(m).count("1")
+    return(mask)
 def setUp():
     global res,req,netIp
-    print("Input: "+netIp)
+    print("Input: "+netIp+"/"+str(mask))
     netIp=binToIp(netAddressBin(ipToBin(netIp),mask))
-    print("Net Address: " + netIp)
+    print("Net Address: " + netIp+"/"+str(mask))
+    print("Mask: "+str(mask))
     for i in req:
         res[i[0]]={"Required": i[1],"Granted": getClosestBinNum(i[1]+2),"Mask":binToIp(getMaskingAddress(32-get2Pow(8)))+"/"+str(32-get2Pow(getClosestBinNum(i[1]+2)))}
         i[1]=getClosestBinNum(i[1]+2)
 def start():
+    print("Subnets: "+str(len(req)))
+    global countHosts,netIp,res,tabHist,mask
+    if type(mask)==str:
+        findMask(mask)
     setUp()
-    global countHosts,netIp,res,tabHist
     while len(req)>0:
         a=popMaxReq()
         res[a[0]]["Network"]=netIp
@@ -104,5 +112,4 @@ def start():
         countHosts+=res[a[0]]["Granted"]
         tabHist+=[[a[0],res[a[0]]["Required"],res[a[0]]["Granted"],res[a[0]]["Mask"],res[a[0]]["Network"],res[a[0]]["Broadcast"],countHosts]]
     printTable()
-print("Subnets: "+str(len(req)))
 start()
